@@ -1,0 +1,15 @@
+# binary
+*.o
+*.a
+*.so
+*.lib
+*.dll
+*.out
+*.exe
+*.app
+*.elf
+ft_fox
+
+# editor files
+.*.sw*
+.vscode/

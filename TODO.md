@@ -1,0 +1,11 @@
+@joleksia:
+- [ ] complete windowing abstraction:
+    - [ ] keyboard input handing
+    - [ ] mouse input handling
+    - [ ] enable OpenGL states
+    - [ ] resize handling
+- [ ] complete rendering abstraction
+    - [ ] default texture
+    - [ ] default vertex array
+    - [ ] custom vertex buffer and index buffer abstraction
+    - [ ] render custom vertex and index buffers
