@@ -23,7 +23,7 @@ const Buffer &Buffer::operator = (const Buffer &other) {
 }
  
 Buffer &Buffer::create(const void *data, GLsizei size) {
-    if (this->ready()) { return (*this); }
+    if (this->ready()) { this->destroy(); }
 
     glCreateBuffers(1, &this->m_id);
     if (!this->m_id) { return (*this); }

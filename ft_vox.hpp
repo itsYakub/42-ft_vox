@@ -22,11 +22,11 @@
 namespace ft {
 
     class Window;
+
     class Buffer;
-    class VertexBuffer;
-    class IndexBuffer;
     class Shader;
     class Texture;
+
     class Renderer;
 
     class Window {
@@ -123,12 +123,16 @@ namespace ft {
 
         public:
             Texture(void);
-            Texture(const void *);          /* type: raw */
-            Texture(const std::string &);   /* type: file */
+            Texture(const size_t, const size_t, void *);
+            Texture(const std::string &);
             Texture(const Texture &);
             ~Texture(void);
 
             const Texture &operator = (const Texture &);
+
+            Texture &load(const std::string &);
+            Texture &create(const size_t, const size_t, void *);
+            Texture &destroy(void);
 
             GLuint getID(void) const;
             GLsizei getWidth(void) const;

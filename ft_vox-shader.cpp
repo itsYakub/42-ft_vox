@@ -197,7 +197,7 @@ bool Shader::ready(void) const {
 }
 
 Shader &Shader::createProgram(void) {
-    if (this->ready()) { return (*this); }
+    if (this->ready()) { glDeleteProgram(this->m_id), this->m_id = 0; }
 
     this->m_id = glCreateProgram();
     return (*this);
