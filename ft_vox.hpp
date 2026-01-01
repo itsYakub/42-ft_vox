@@ -5,6 +5,9 @@
 # define _ft_vox_hpp_ 1
 #
 # include <string>
+# include <fstream>
+# include <iostream>
+# include <unordered_map>
 # include <cstdint>
 # include <cstddef>
 # include <cstdlib>
@@ -51,55 +54,42 @@ namespace ft {
 
             Window &create(const std::string &, const size_t, const size_t);
             Window &quit(void);
+            Window &clear(const float, const float, const float);
+            Window &clear(const float, const float, const float, const float);
+            Window &clear(const float [4]);
 
-            bool ready(void);
+            bool ready(void) const;
             bool shouldQuit(void);
     };
     
     class Buffer {
         private:
             GLuint m_id;
+            GLsizei m_size;
 
         public:
             Buffer(void);
+            Buffer(const void *, GLsizei);
             Buffer(const Buffer &);
             ~Buffer(void);
 
             const Buffer &operator = (const Buffer &);
 
-            Buffer &bind(void) = 0;
-            BUffer &unbind(void) = 0;
+            Buffer &create(const void *, GLsizei);
+            Buffer &destroy(void);
+            Buffer &setData(const void *, GLsizei, GLsizei);
 
-            GLuint getID(void);
-    };
-    
-    class VertexBuffer : public Buffer {
-        public:
-            VertexBuffer(void);
-            VertexBuffer(const size_t);
-            VertexBuffer(const std::vector<float> &);
-            VertexBuffer(const float [], const size_t);
-            VertexBuffer(const VertexBuffer &);
-            ~VertexBuffer(void);
+            GLuint getID(void) const;
+            GLsizei getSize(void) const;
 
-            const VertexBuffer &operator = (const VertexBuffer &);
-    };
-
-    class IndexBuffer : public Buffer {
-        public:
-            IndexBuffer(void);
-            IndexBuffer(const size_t);
-            IndexBuffer(const std::vector<float> &);
-            IndexBuffer(const float [], const size_t);
-            IndexBuffer(const IndexBuffer &);
-            ~IndexBuffer(void);
-
-            const IndexBuffer &operator = (const IndexBuffer &);
+            bool ready(void);
     };
 
     class Shader {
         private:
             GLuint m_id;
+
+            std::unordered_map<std::string, GLint> m_uniforms;
 
         public:
             Shader(void);
@@ -115,7 +105,13 @@ namespace ft {
             Shader &setFragmentShader(const GLchar *);      /* type: raw */
             Shader &setFragmentShader(const std::string &); /* type: file */
 
-            GLuint getID();
+            GLuint getID(void) const;
+            GLint getUniform(const std::string &);
+
+            bool ready(void) const;
+
+        private:
+            Shader &createProgram(void);
     };
 
     class Texture {
@@ -134,10 +130,10 @@ namespace ft {
 
             const Texture &operator = (const Texture &);
 
-            GLuint getID(void);
-            GLsizei getWidth(void);
-            GLsizei getHeight(void);
-            GLsizei getChannels(void);
+            GLuint getID(void) const;
+            GLsizei getWidth(void) const;
+            GLsizei getHeight(void) const;
+            GLsizei getChannels(void) const;
     };
 
     class Renderer {
@@ -150,8 +146,10 @@ namespace ft {
             ft::Texture m_textureDefault,
                        *m_textureCurrent;
 
-            ft::VertexBuffer *m_vertexBuffer;
-            ft::IndexBuffer  *m_indexBuffer;
+            ft::Buffer *m_vertexBuffer;
+            ft::Buffer *m_indexBuffer;
+
+            bool m_ready;
 
         public:
             Renderer(const ft::Window &);
@@ -168,7 +166,14 @@ namespace ft {
             ft::Texture &getDefaultTexture(void) const;
             Renderer &setCurrentTexture(const ft::Texture &);
 
-            ft
+            ft::Buffer &getCurrentVertexBuffer(void) const;
+            ft::Buffer &getCurrentIndexBuffer(void) const;
+            Renderer &setCurrentVertexBuffer(const ft::Buffer &);
+            Renderer &setCurrentIndexBuffer(const ft::Buffer &);
+
+            Renderer &display(void) const;
+
+            bool ready(void) const;
     };
 };
 

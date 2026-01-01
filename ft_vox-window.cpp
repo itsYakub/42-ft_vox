@@ -91,7 +91,24 @@ Window &Window::quit(void) {
     return (*this);
 }
 
-bool Window::ready(void) {
+Window &Window::clear(const float r, const float g, const float b) {
+    return (this->clear((float [4]) { r, g, b, 1.0 } ));
+}
+
+Window &Window::clear(const float r, const float g, const float b, const float a) {
+    return (this->clear((float [4]) { r, g, b, a } ));
+}
+
+Window &Window::clear(const float color[4]) {
+    if (!this->m_ready) { return (*this); }
+
+    glClearColor(color[0], color[1], color[2], color[3]);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    return (*this);
+}
+
+bool Window::ready(void) const {
     return (this->m_ready);
 }
 
