@@ -101,7 +101,10 @@ Shader &Shader::setVertexShader(const std::string &filepath) {
     if (!this->ready()) { this->createProgram(); }
 
     std::ifstream infile(filepath);
-    if (!infile.is_open()) { return (*this); }
+    if (!infile.is_open()) {
+        FT_LOGE("shader: file failed | NAME: %s\n", filepath.c_str());
+        return (*this);
+    }
 
     std::string content;
     std::string line;
@@ -157,7 +160,10 @@ Shader &Shader::setFragmentShader(const std::string &filepath) {
     if (!this->ready()) { this->createProgram(); }
 
     std::ifstream infile(filepath);
-    if (!infile.is_open()) { return (*this); }
+    if (!infile.is_open()) {
+        FT_LOGE("shader: file failed | NAME: %s\n", filepath.c_str());
+        return (*this);
+    }
 
     std::string content;
     std::string line;
@@ -166,6 +172,20 @@ Shader &Shader::setFragmentShader(const std::string &filepath) {
     }    
 
     return (this->setFragmentShader(content.c_str()));
+}
+
+Shader &Shader::bind(void) {
+    if (!this->ready()) { return (*this); }
+
+    glUseProgram(this->m_id);
+    return (*this);
+}
+
+Shader &Shader::unbind(void) {
+    if (!this->ready()) { return (*this); }
+
+    glUseProgram(0);
+    return (*this);
 }
 
 GLuint Shader::getID(void) const {

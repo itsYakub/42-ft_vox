@@ -31,6 +31,12 @@ int main(int ac, char **av) {
 
     do {
         window.clear(0.1, 0.1, 0.1, 1.0);
+
+        shader.bind();
+        texture.bind();
+
+        texture.unbind();
+        shader.unbind();
     } while (!window.shouldQuit());
 
     return (0);

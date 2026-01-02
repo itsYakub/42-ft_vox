@@ -112,9 +112,10 @@ namespace ft {
 
             Shader &setVertexShader(const GLchar *);        /* type: raw */
             Shader &setVertexShader(const std::string &);   /* type: file */
-
             Shader &setFragmentShader(const GLchar *);      /* type: raw */
             Shader &setFragmentShader(const std::string &); /* type: file */
+            Shader &bind(void);
+            Shader &unbind(void);
 
             GLuint getID(void) const;
             GLint getUniform(const std::string &);
@@ -146,6 +147,8 @@ namespace ft {
             Texture &create(const size_t, const size_t, void *);
             Texture &create(const size_t, const size_t, const size_t, void *);
             Texture &destroy(void);
+            Texture &bind(void);
+            Texture &unbind(void);
 
             GLuint getID(void) const;
             GLsizei getWidth(void) const;

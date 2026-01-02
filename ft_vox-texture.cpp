@@ -99,6 +99,20 @@ Texture &Texture::destroy(void) {
     return (*this);
 }
 
+Texture &Texture::bind(void) {
+    if (!this->ready()) { return (*this); }
+
+    glBindTextureUnit(0, this->m_id);
+    return (*this);
+}
+
+Texture &Texture::unbind(void) {
+    if (!this->ready()) { return (*this); }
+
+    glBindTextureUnit(0, 0);
+    return (*this);
+}
+
 GLuint Texture::getID(void) const {
     return (this->m_id);
 }
