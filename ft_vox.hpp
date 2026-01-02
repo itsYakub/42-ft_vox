@@ -14,6 +14,7 @@
 #
 # include "SDL2/SDL.h"      /* SDL2 - windowing library */
 # include "gload/gload.h"   /* gload.h - OpenGL loader (v.1.0 - v.4.6, ES 1.0 - 3.3) */
+# include "image/image.h"   /* image.h - Image loader and writer (png, pnm) */
 #
 # if !defined FT_UNUSED
 #  define FT_UNUSED(x) ((void) x)
@@ -138,6 +139,8 @@ namespace ft {
             GLsizei getWidth(void) const;
             GLsizei getHeight(void) const;
             GLsizei getChannels(void) const;
+
+            bool ready(void) const;
     };
 
     class Renderer {
