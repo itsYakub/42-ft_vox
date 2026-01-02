@@ -4,8 +4,10 @@ using namespace ft;
 
 Texture::Texture(void) : m_id(0), m_width(0), m_height(0), m_channels(0) { }
 
-Texture::Texture(const size_t width, const size_t height, void *data) : m_id(0), m_width(0), m_height(0), m_channels(0) {
-    this->create(width, height, data);
+Texture::Texture(const size_t width, const size_t height, void *data) : ft::Texture(width, height, 4, data) { }
+
+Texture::Texture(const size_t width, const size_t height, const size_t channels, void *data) : m_id(0), m_width(0), m_height(0), m_channels(0) {
+    this->create(width, height, channels, data);
 }
 
 Texture::Texture(const std::string &filepath) : m_id(0), m_width(0), m_height(0), m_channels(0) {
@@ -29,18 +31,62 @@ const Texture &Texture::operator = (const Texture &other) {
 }
 
 Texture &Texture::load(const std::string &filepath) {
-    FT_UNUSED(filepath);
+    if (this->ready()) { this->destroy(); }
+    
+    GLsizei width    = 0,
+            height   = 0,
+            channels = 0;
+    
+    stbi_uc *data = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
+    if (!data) {
+        return (*this);
+    }
+
+    this->create(width, height, channels, data);
+    free(data);
+    
     return (*this);
 }
 
 Texture &Texture::create(const size_t width, const size_t height, void *data) {
-    FT_UNUSED(width);
-    FT_UNUSED(height);
-    FT_UNUSED(data);
+    return (this->create(width, height, 4, data));
+}
+
+Texture &Texture::create(const size_t width, const size_t height, const size_t channels, void *data) {
+    if (this->ready()) { this->destroy(); }
+
+    GLenum format = GL_NONE;
+    switch (channels) {
+        case (1): { format = GL_RED; } break;
+        case (3): { format = GL_RGB; } break;
+        case (4): { format = GL_RGBA; } break;
+
+        default: { return (*this); }
+    }
+
+    glCreateTextures(GL_TEXTURE_2D, 1, &this->m_id);
+    if (!this->m_id) {
+        return (*this);
+    }
+
+    glTextureParameteri(this->m_id, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTextureParameteri(this->m_id, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTextureParameteri(this->m_id, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTextureParameteri(this->m_id, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+
+    glTextureStorage2D(this->m_id, 1, GL_RGBA8, width, height);
+    glTextureSubImage2D(this->m_id, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, data);
+    glGenerateTextureMipmap(this->m_id);
+    
     return (*this);
 }
 
 Texture &Texture::destroy(void) {
+    glDeleteTextures(1, &this->m_id);
+    this->m_id = 0;
+    this->m_width = 0;
+    this->m_height = 0;
+    this->m_channels = 0;
     return (*this);
 }
 

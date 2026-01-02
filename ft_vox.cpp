@@ -26,6 +26,9 @@ int main(int ac, char **av) {
     ft::Buffer vertex_buffer = ft::Buffer(g_vertices, sizeof(g_vertices));
     ft::Buffer index_buffer = ft::Buffer(g_indices, sizeof(g_indices));
 
+    uint32_t data = 0xffffffff;
+    ft::Texture texture = ft::Texture(1, 1, &data);
+
     do {
         window.clear(0.1, 0.1, 0.1, 1.0);
     } while (!window.shouldQuit());

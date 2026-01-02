@@ -14,7 +14,7 @@
 #
 # include "SDL2/SDL.h"      /* SDL2 - windowing library */
 # include "gload/gload.h"   /* gload.h - OpenGL loader (v.1.0 - v.4.6, ES 1.0 - 3.3) */
-# include "image/image.h"   /* image.h - Image loader and writer (png, pnm) */
+# include "stb/stb_image.h" /* stb_image.h - image file format loader */
 #
 # if !defined FT_UNUSED
 #  define FT_UNUSED(x) ((void) x)
@@ -125,6 +125,7 @@ namespace ft {
         public:
             Texture(void);
             Texture(const size_t, const size_t, void *);
+            Texture(const size_t, const size_t, const size_t, void *);
             Texture(const std::string &);
             Texture(const Texture &);
             ~Texture(void);
@@ -133,6 +134,7 @@ namespace ft {
 
             Texture &load(const std::string &);
             Texture &create(const size_t, const size_t, void *);
+            Texture &create(const size_t, const size_t, const size_t, void *);
             Texture &destroy(void);
 
             GLuint getID(void) const;
