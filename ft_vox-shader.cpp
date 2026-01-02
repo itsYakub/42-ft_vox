@@ -44,6 +44,8 @@ Shader::Shader(const Shader &other) : m_id(other.m_id), m_uniforms(other.m_unifo
 
 Shader::~Shader(void) {
     glDeleteProgram(this->m_id), this->m_id = 0;
+    
+    FT_LOG("shader: deleted sccessfully\n");
 }
 
 const Shader &Shader::operator = (const Shader &other) {
@@ -70,7 +72,7 @@ Shader &Shader::setVertexShader(const GLchar *raw) {
         GLchar message[1024] = { };
         glGetShaderInfoLog(shader, 1024, &length, message);
 
-        std::cerr << "Fragment Shader: " << std::endl << message;
+        FT_LOGE("vertex: %s\n", message);
         return (*this);
     }
 
@@ -87,10 +89,11 @@ Shader &Shader::setVertexShader(const GLchar *raw) {
         GLchar message[1024] = { };
         glGetProgramInfoLog(shader, 1024, &length, message);
 
-        std::cerr << "Shader Program: " << std::endl << message;
+        FT_LOGE("shader: %s\n", message);
         return (*this);
     }
-   
+  
+    FT_LOG("shader: new vertex shader set\n");
     return (*this);
 }
 
@@ -125,7 +128,7 @@ Shader &Shader::setFragmentShader(const GLchar *raw) {
         GLchar message[1024] = { };
         glGetShaderInfoLog(shader, 1024, &length, message);
 
-        std::cerr << "Vertex Shader: " << std::endl << message;
+        FT_LOGE("fragment: %s\n", message);
         return (*this);
     }
     
@@ -142,10 +145,11 @@ Shader &Shader::setFragmentShader(const GLchar *raw) {
         GLchar message[1024] = { };
         glGetProgramInfoLog(shader, 1024, &length, message);
 
-        std::cerr << "Shader Program: " << std::endl << message;
+        FT_LOGE("shader: %s\n", message);
         return (*this);
     }
    
+    FT_LOG("shader: new fragment shader set\n");
     return (*this);
 }
 
@@ -171,21 +175,21 @@ GLuint Shader::getID(void) const {
 GLint Shader::getUniform(const std::string &name) {
     if (!this->ready()) { this->createProgram(); }
 
-    /* check if uniform ID already in map... */
+    /* check if uniform IDalready in map... */
     for (auto i : this->m_uniforms) {
         if (i.first == name) {
             GLint id = i.second;
             if (id == -1) {
-                std::cerr << "shader: invalid uniform: " << name << std::endl;
+                FT_LOGE("shader: invalid uniform | NAME: %s\n", name.c_str());
             }
             return (id);
         }
     }
 
-    /* ...otherwise, retrieve it from the shader, insert it to the map and return the ID */
+    /* ...otherwise, retrieve it from the shader, insert it to the map and return the ID*/
     GLint id = glGetUniformLocation(this->m_id, name.c_str());
     if (id == -1) {
-        std::cerr << "shader: invalid uniform: " << name << std::endl;
+        FT_LOGE("shader: invalid uniform | NAME: %s\n", name.c_str());
     }
     this->m_uniforms.insert( { name, id } );
     return (id);
@@ -200,5 +204,6 @@ Shader &Shader::createProgram(void) {
     if (this->ready()) { glDeleteProgram(this->m_id), this->m_id = 0; }
 
     this->m_id = glCreateProgram();
+    FT_LOG("shader: created successfully | ID: %d\n", this->m_id);
     return (*this);
 }

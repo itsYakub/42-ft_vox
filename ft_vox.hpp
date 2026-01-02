@@ -8,6 +8,8 @@
 # include <fstream>
 # include <iostream>
 # include <unordered_map>
+#
+# include <cstdio>
 # include <cstdint>
 # include <cstddef>
 # include <cstdlib>
@@ -19,6 +21,14 @@
 # if !defined FT_UNUSED
 #  define FT_UNUSED(x) ((void) x)
 # endif /* FT_UNUSED */
+#
+# if !defined FT_LOG
+#  define FT_LOG(...) fprintf(stdout, "[ INFO ] ft: " __VA_ARGS__)
+# endif /* FT_LOG */
+#
+# if !defined FT_LOGE
+#  define FT_LOGE(...) fprintf(stderr, "[ ERR ] ft: " __VA_ARGS__)
+# endif /* FT_LOGE */
 
 namespace ft {
 

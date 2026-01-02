@@ -29,9 +29,15 @@ const Window &Window::operator = (const Window &other) {
 }
 
 Window &Window::create(const std::string &t, const size_t w, const size_t h) {
-    if (this->m_ready != false) { return (*this); }
+    if (this->m_ready != false) {
+        FT_LOGE("window: already created\n");
+        return (*this);
+    }
 
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS)) { return (*this); }
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS)) {
+        FT_LOGE("window: %s\n", SDL_GetError());
+        return (*this);
+    }
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
@@ -39,6 +45,7 @@ Window &Window::create(const std::string &t, const size_t w, const size_t h) {
 
     this->m_window = SDL_CreateWindow(t.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     if (!this->m_window) {
+        FT_LOGE("window: %s\n", SDL_GetError());
         SDL_Quit();
         
         return (*this);
@@ -46,6 +53,7 @@ Window &Window::create(const std::string &t, const size_t w, const size_t h) {
 
     this->m_context = SDL_GL_CreateContext(this->m_window);
     if (!this->m_context) {
+        FT_LOGE("window: %s\n", SDL_GetError());
         SDL_DestroyWindow(this->m_window);
         SDL_Quit();
 
@@ -55,6 +63,7 @@ Window &Window::create(const std::string &t, const size_t w, const size_t h) {
     SDL_GL_MakeCurrent(this->m_window, this->m_context);
 
     if (!gloadLoadGLLoader((t_gloadLoader) SDL_GL_GetProcAddress)) {
+        FT_LOGE("window: failed to load OpenGL\n");
         SDL_GL_DeleteContext(this->m_context);
         SDL_DestroyWindow(this->m_window);
         SDL_Quit();
@@ -68,6 +77,7 @@ Window &Window::create(const std::string &t, const size_t w, const size_t h) {
     glGetIntegerv(GL_MINOR_VERSION, &gl_minor);
     
     if (gl_major != 4 && gl_minor != 6) {
+        FT_LOGE("window: invalid OpenGL version | VERSION: %d.%d (expected: 4.6)\n", gl_major, gl_minor);
         SDL_GL_DeleteContext(this->m_context);
         SDL_DestroyWindow(this->m_window);
         SDL_Quit();
@@ -76,6 +86,8 @@ Window &Window::create(const std::string &t, const size_t w, const size_t h) {
     }
 
     this->m_ready = true;
+    FT_LOG("window: created successfully | WIDTH: %zu | HEIGHT: %zu\n", w, h);
+    FT_LOG("window: OpenGL loaded successfully | VERSION: %d.%d\n", gl_major, gl_minor);
     return (*this);
 }
 

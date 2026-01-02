@@ -39,12 +39,14 @@ Texture &Texture::load(const std::string &filepath) {
     
     stbi_uc *data = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
     if (!data) {
+        FT_LOGE("texture: loading failure | PATH: %s\n", filepath.c_str());
         return (*this);
     }
 
     this->create(width, height, channels, data);
     free(data);
     
+    FT_LOG("texture: created successfully | ID: %d | PATH: %s\n", this->m_id, filepath.c_str());
     return (*this);
 }
 
@@ -66,6 +68,7 @@ Texture &Texture::create(const size_t width, const size_t height, const size_t c
 
     glCreateTextures(GL_TEXTURE_2D, 1, &this->m_id);
     if (!this->m_id) {
+        FT_LOGE("texture: create failure\n");
         return (*this);
     }
 
@@ -77,7 +80,11 @@ Texture &Texture::create(const size_t width, const size_t height, const size_t c
     glTextureStorage2D(this->m_id, 1, GL_RGBA8, width, height);
     glTextureSubImage2D(this->m_id, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, data);
     glGenerateTextureMipmap(this->m_id);
-    
+   
+    this->m_width = width;
+    this->m_height = height;
+    this->m_channels = channels; 
+    FT_LOG("texture: created successfully | ID: %d | WIDH: %d | HEIGHT: %d | CHANNELS: %d\n", this->m_id, this->m_width, this->m_height, this->m_channels);
     return (*this);
 }
 
@@ -87,6 +94,8 @@ Texture &Texture::destroy(void) {
     this->m_width = 0;
     this->m_height = 0;
     this->m_channels = 0;
+    
+    FT_LOG("texture: deleted successefully\n"); 
     return (*this);
 }
 

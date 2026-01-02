@@ -30,6 +30,8 @@ Buffer &Buffer::create(const void *data, GLsizei size) {
 
     glNamedBufferData(this->m_id, size, data, GL_DYNAMIC_DRAW);
     this->m_size = size;
+
+    FT_LOG("buffer: created successfully | ID: %d | SIZE: %d\n", this->m_id, this->m_size);
     return (*this);
 }
 
@@ -37,6 +39,7 @@ Buffer &Buffer::destroy(void) {
     if (!this->ready()) { return (*this); }
     
     glDeleteBuffers(1, &this->m_id), this->m_id = 0;
+    FT_LOG("buffer: deleted successfully\n");
     return (*this);
 }
 
