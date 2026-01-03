@@ -65,6 +65,7 @@ namespace ft {
 
             Window &create(const std::string &, const size_t, const size_t);
             Window &quit(void);
+            Window &makeCurrent(void);
             Window &clear(const float, const float, const float);
             Window &clear(const float, const float, const float, const float);
             Window &clear(const float [4]);
@@ -72,6 +73,31 @@ namespace ft {
             bool ready(void) const;
             bool shouldQuit(void);
     };
+    
+    class VertexArray {
+        private:
+            GLuint m_id;
+
+        public:
+            VertexArray(void);
+            VertexArray(const VertexArray &);
+            ~VertexArray(void);
+
+            const VertexArray &operator = (const VertexArray &);
+
+            VertexArray &create(void);
+            VertexArray &destroy(void);
+            VertexArray &bind(void);
+            VertexArray &unbind(void);
+            VertexArray &setLayout(GLuint, GLuint, GLsizei, GLsizei);
+            VertexArray &setVertexBuffer(ft::Buffer &, GLuint, GLsizei, GLsizei);
+            VertexArray &setIndexBuffer(ft::Buffer &);
+
+            GLuint getID(void) const;
+
+            bool ready(void);
+    };
+
     
     class Buffer {
         private:

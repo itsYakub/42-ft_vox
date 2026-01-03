@@ -26,7 +26,10 @@ Buffer &Buffer::create(const void *data, GLsizei size) {
     if (this->ready()) { this->destroy(); }
 
     glCreateBuffers(1, &this->m_id);
-    if (!this->m_id) { return (*this); }
+    if (!this->m_id) {
+        FT_LOGE("buffer: failed to create\n");
+        return (*this);
+    }
 
     glNamedBufferData(this->m_id, size, data, GL_DYNAMIC_DRAW);
     this->m_size = size;

@@ -26,6 +26,13 @@ int main(int ac, char **av) {
     ft::Buffer vertex_buffer = ft::Buffer(g_vertices, sizeof(g_vertices));
     ft::Buffer index_buffer = ft::Buffer(g_indices, sizeof(g_indices));
 
+    ft::VertexArray vertex_array = ft::VertexArray();
+    vertex_array.setLayout(0, 0, 3, 0 * sizeof(GLfloat));
+    vertex_array.setLayout(1, 0, 4, 3 * sizeof(GLfloat));
+    vertex_array.setLayout(2, 0, 2, 7 * sizeof(GLfloat));
+    vertex_array.setVertexBuffer(vertex_buffer, 0, 0, 9 * sizeof(GLfloat));
+    vertex_array.setIndexBuffer(index_buffer);
+
     uint32_t data = 0xffffffff;
     ft::Texture texture = ft::Texture(1, 1, &data);
 
@@ -33,9 +40,11 @@ int main(int ac, char **av) {
         window.clear(0.1, 0.1, 0.1, 1.0);
 
         shader.bind();
+        vertex_array.bind();
         texture.bind();
 
         texture.unbind();
+        vertex_array.unbind();
         shader.unbind();
     } while (!window.shouldQuit());
 

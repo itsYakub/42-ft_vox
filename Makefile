@@ -16,12 +16,13 @@ LXXFLAGS	= -lSDL2
 # ========
 
 OBJS		= $(SRCS:.cpp=.o)
-SRCS		= $(MK_ROOT)ft_vox.cpp			\
-			  $(MK_ROOT)ft_vox-window.cpp	\
-			  $(MK_ROOT)ft_vox-shader.cpp	\
-			  $(MK_ROOT)ft_vox-texture.cpp	\
-			  $(MK_ROOT)ft_vox-buffer.cpp	\
-			  $(MK_ROOT)ft_vox-renderer.cpp	\
+SRCS		= $(MK_ROOT)ft_vox.cpp				\
+			  $(MK_ROOT)ft_vox-window.cpp		\
+			  $(MK_ROOT)ft_vox-shader.cpp		\
+			  $(MK_ROOT)ft_vox-texture.cpp		\
+			  $(MK_ROOT)ft_vox-buffer.cpp		\
+			  $(MK_ROOT)ft_vox-vertexarray.cpp	\
+			  $(MK_ROOT)ft_vox-renderer.cpp		\
 			  $(MK_ROOT)ft_vox-deps.cpp
 
 # ========
