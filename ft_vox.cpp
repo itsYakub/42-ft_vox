@@ -43,6 +43,8 @@ int main(int ac, char **av) {
         vertex_array.bind();
         texture.bind();
 
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
         texture.unbind();
         vertex_array.unbind();
         shader.unbind();
